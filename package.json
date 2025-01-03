@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "tsc",
+    "production": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -30,5 +32,8 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "yup": "^1.6.1"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
