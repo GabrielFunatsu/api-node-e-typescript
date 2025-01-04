@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
+import { CidadesProvider } from '../../database/providers/cidades';
 
 interface IParamProps {
   id?: number;
@@ -18,15 +19,22 @@ export const getById = async (
   req: Request<IParamProps>,
   res: Response
 ): Promise<any> => {
-  if (Number(req.params.id) === 99999)
-    return res.status(500).json({
+  if (!req.params.id) {
+    return res.status(400).json({
       errors: {
-        default: 'Registro não encontrado',
+        default: 'O parâmetro "id" precisa ser informado',
       },
     });
+  }
 
-  return res.status(200).json({
-    id: req.params.id,
-    nome: 'Dourados',
-  });
+  const result = await CidadesProvider.getById(req.params.id);
+  if (result instanceof Error) {
+    return res.status(500).json({
+      errors: {
+        default: result.message,
+      },
+    });
+  }
+
+  return res.status(200).json(result);
 };
